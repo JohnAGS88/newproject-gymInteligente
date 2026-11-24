@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GymInteligente AI | Autonomous Multi-Branch Enterprise OS</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Animate.css -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            gym: {
+              dark: '#07090e',
+              card: '#0f1420',
+              cardHover: '#151c2e',
+              border: '#1e293b',
+              accent: '#10b981', // Emerald
+              cyan: '#06b6d4',
+              neon: '#22c55e',
+              danger: '#f43f5e',
+              purple: '#8b5cf6',
+              amber: '#f59e0b'
+            }
+          },
+          fontFamily: {
+            mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+            sans: ['Inter', 'system-ui', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; background-color: #06080d; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .glow-green { box-shadow: 0 0 25px rgba(16, 185, 129, 0.25); }
+    .glow-cyan { box-shadow: 0 0 25px rgba(6, 182, 212, 0.25); }
+    .glow-purple { box-shadow: 0 0 25px rgba(139, 92, 246, 0.25); }
+    
+    /* Biometric Mesh Grid Scanning Animation */
+    .face-mesh-scan {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .scanner-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #10b981, #06b6d4, transparent);
+      box-shadow: 0 0 15px #10b981;
+      animation: scanAnim 2.2s ease-in-out infinite alternate;
+    }
+    @keyframes scanAnim {
+      0% { top: 5%; opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { top: 90%; opacity: 0.2; }
+    }
+
+    /* Rotating QR countdown */
+    .timer-circle {
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+    }
+  </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-black">
+
+  <!-- Top Real-time Bar -->
+  <header class="border-b border-gym-border bg-[#0a0e17]/95 backdrop-blur sticky top-0 z-50 px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-cyan-500 to-indigo-500 p-[1.5px] flex items-center justify-center glow-green">
+          <div class="w-full h-full bg-[#090d16] rounded-[10px] flex items-center justify-center">
+            <i data-lucide="dumbbell" class="w-5 h-5 text-emerald-400"></i>
+          </div>
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-emerald-400">GYM INTELIGENTE</span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-mono font-bold">AI Enterprise OS</span>
+          </div>
+          <p class="text-[11px] text-slate-400">Laravel 12 Multi-Branch Core • Prism AI Swarms • Biometric Encrypted FaceID</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center/Right Branch Selector & Action Controls -->
+    <div class="flex items-center space-x-3">
+      
+      <!-- Branch Selector -->
+      <div class="flex items-center bg-[#0f1420] border border-gym-border rounded-xl px-3.5 py-2 space-x-2 text-xs">
+        <div class="flex items-center space-x-1.5 text-emerald-400 font-semibold">
+          <i data-lucide="map-pin" class="w-4 h-4"></i>
+          <span>Branch:</span>
+        </div>
+        <select id="branchSelector" onchange="switchBranch(this.value)" class="bg-transparent text-white font-mono font-bold focus:outline-none cursor-pointer pr-2">
+          <option value="madrid" class="bg-[#0f1420]">Madrid Central (Salamanca)</option>
+          <option value="miami" class="bg-[#0f1420]">Miami Downtown (Brickell)</option>
+          <option value="cdmx" class="bg-[#0f1420]">CDMX (Polanco)</option>
+        </select>
+      </div>
+
+      <!-- Real-time Multi-tenant Badge -->
+      <div class="flex items-center space-x-2 px-3 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-bold">
+        <span class="relative flex h-2 w-2">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+        </span>
+        <span id="occupancyBadge">84 / 120 CAPACITY</span>
+      </div>
+
+      <!-- 30s Auto Video Demo Mode Button -->
+      <button onclick="startAutoDemo()" id="btnAutoDemo" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-cyan-500 text-white font-bold text-xs flex items-center space-x-1.5 shadow-lg shadow-emerald-950/40 transition-all transform hover:scale-105">
+        <i data-lucide="video" class="w-3.5 h-3.5 fill-current"></i>
+        <span>🎬 30s Video Demo Mode</span>
+      </button>
+
+      <!-- Turnstile Simulation Trigger -->
+      <button onclick="triggerGateOpen()" class="px-3.5 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold text-xs flex items-center space-x-1.5 shadow-lg shadow-indigo-950/40 transition-all transform hover:scale-105">
+        <i data-lucide="door-open" class="w-3.5 h-3.5"></i>
+        <span>Test Turnstile Gate</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Hub -->
+  <div class="bg-[#0a0d15] border-b border-gym-border px-6 py-2.5 flex items-center justify-between">
+    <div class="flex items-center space-x-2">
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center space-x-2 transition-all">
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+        <span>Executive Command Center</span>
+      </button>
+      <button onclick="switchTab('faceid')" id="nav-faceid" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition-all">
+        <i data-lucide="scan-face" class="w-4 h-4"></i>
+        <span>Biometric FaceID & Dynamic QR Kiosk</span>
+      </button>
+      <button onclick="switchTab('agents')" id="nav-agents" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition-all">
+        <i data-lucide="bot" class="w-4 h-4"></i>
+        <span>Autonomous AI Agents Fleet</span>
+      </button>
+      <button onclick="switchTab('smartcoach')" id="nav-smartcoach" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition-all">
+        <i data-lucide="activity" class="w-4 h-4"></i>
+        <span>SmartCoach AI & Workout Generator</span>
+      </button>
+      <button onclick="switchTab('financial')" id="nav-financial" class="px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition-all">
+        <i data-lucide="credit-card" class="w-4 h-4"></i>
+        <span>Stripe Tokenized Billing & Subscriptions</span>
+      </button>
+    </div>
+
+    <div class="text-[11px] font-mono text-slate-400 flex items-center space-x-3">
+      <span>UUID v7 Primary Keys</span>
+      <span class="text-slate-600">|</span>
+      <span>0% Photos in DB (128-d Encrypted Vectors)</span>
+    </div>
+  </div>
+
+  <!-- Main Container -->
+  <main class="flex-1 p-6 max-w-[1700px] mx-auto w-full space-y-6">
+
+    <!-- VIEW 1: EXECUTIVE COMMAND CENTER -->
+    <div id="view-dashboard" class="space-y-6">
+
+      <!-- Top 4 KPI Metrics -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- MRR -->
+        <div class="bg-gym-card border border-gym-border rounded-2xl p-5 relative overflow-hidden glow-green">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+            <span>Monthly Recurring Revenue</span>
+            <i data-lucide="trending-up" class="w-4 h-4 text-emerald-400"></i>
+          </div>
+          <div class="text-3xl font-black text-white font-mono mt-2" id="kpiMrr">$48,920</div>
+          <div class="flex items-center space-x-2 mt-2 text-[11px]">
+            <span class="text-emerald-400 font-bold font-mono">+14.2%</span>
+            <span class="text-slate-400">vs last month</span>
+          </div>
+        </div>
+
+        <!-- Active Members -->
+        <div class="bg-gym-card border border-gym-border rounded-2xl p-5 relative overflow-hidden">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+            <span>Active Memberships</span>
+            <i data-lucide="users" class="w-4 h-4 text-cyan-400"></i>
+          </div>
+          <div class="text-3xl font-black text-white font-mono mt-2" id="kpiMembers">1,480</div>
+          <div class="flex items-center space-x-2 mt-2 text-[11px]">
+            <span class="text-cyan-400 font-bold font-mono">98.2%</span>
+            <span class="text-slate-400">Payment success rate</span>
+          </div>
+        </div>
+
+        <!-- Check-ins Today -->
+        <div class="bg-gym-card border border-gym-border rounded-2xl p-5 relative overflow-hidden">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+            <span>Biometric Check-ins Today</span>
+            <i data-lucide="scan" class="w-4 h-4 text-purple-400"></i>
+          </div>
+          <div class="text-3xl font-black text-white font-mono mt-2" id="kpiCheckins">642</div>
+          <div class="flex items-center space-x-2 mt-2 text-[11px]">
+            <span class="text-purple-400 font-bold font-mono">140ms</span>
+            <span class="text-slate-400">Avg FaceID verification</span>
+          </div>
+        </div>
+
+        <!-- Churn Rate -->
+        <div class="bg-gym-card border border-gym-border rounded-2xl p-5 relative overflow-hidden">
+          <div class="flex items-center justify-between text-slate-400 text-xs font-medium">
+            <span>AI Churn Risk Reduction</span>
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+          </div>
+          <div class="text-3xl font-black text-white font-mono mt-2" id="kpiChurn">1.8%</div>
+          <div class="flex items-center space-x-2 mt-2 text-[11px]">
+            <span class="text-emerald-400 font-bold font-mono">-62%</span>
+            <span class="text-slate-400">Prevented by GymOps AI</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Charts & Multi-Branch Feed -->
+      <div class="grid grid-cols-12 gap-6">
+        
+        <!-- Live Occupancy Heatmap & Revenue Trend (8 Cols) -->
+        <div class="col-span-12 lg:col-span-8 bg-gym-card border border-gym-border rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h3 class="text-base font-bold text-white">Live Hourly Gym Traffic & AI Prediction</h3>
+              <p class="text-xs text-slate-400">Real-time turnstile sensor feed vs Prism AI occupancy forecast</p>
+            </div>
+            <div class="flex items-center space-x-2 text-xs font-mono">
+              <span class="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">● Real Accesses</span>
+              <span class="px-2.5 py-1 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">-- AI Forecast</span>
+            </div>
+          </div>
+
+          <div class="h-64 relative">
+            <canvas id="trafficChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Global Multi-Branch Status (4 Cols) -->
+        <div class="col-span-12 lg:col-span-4 bg-gym-card border border-gym-border rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-bold text-white">Global Branches</h3>
+            <span class="text-xs font-mono text-emerald-400">3 Online</span>
+          </div>
+
+          <div class="space-y-3" id="globalBranchesList">
+            <!-- Madrid -->
+            <div class="p-3.5 bg-[#090d16] border border-gym-border rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="text-xs font-bold text-slate-200">Madrid Salamanca</span>
+                </div>
+                <span class="text-xs font-mono text-emerald-400 font-bold">$18,400 MRR</span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span>Capacity: 84 / 120 (70%)</span>
+                <span>Turnstiles: 4 Active</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-emerald-400 h-full w-[70%]"></div>
+              </div>
+            </div>
+
+            <!-- Miami -->
+            <div class="p-3.5 bg-[#090d16] border border-gym-border rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="text-xs font-bold text-slate-200">Miami Brickell</span>
+                </div>
+                <span class="text-xs font-mono text-cyan-400 font-bold">$21,800 MRR</span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span>Capacity: 112 / 150 (74%)</span>
+                <span>Turnstiles: 6 Active</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-cyan-400 h-full w-[74%]"></div>
+              </div>
+            </div>
+
+            <!-- CDMX -->
+            <div class="p-3.5 bg-[#090d16] border border-gym-border rounded-xl space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span class="text-xs font-bold text-slate-200">CDMX Polanco</span>
+                </div>
+                <span class="text-xs font-mono text-purple-400 font-bold">$8,720 MRR</span>
+              </div>
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span>Capacity: 45 / 90 (50%)</span>
+                <span>Turnstiles: 3 Active</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div class="bg-purple-400 h-full w-[50%]"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- VIEW 2: BIOMETRIC FACEID & DYNAMIC QR KIOSK -->
+    <div id="view-faceid" class="hidden space-y-6">
+
+      <div class="grid grid-cols-12 gap-6">
+
+        <!-- FaceID Camera Simulator (7 Cols) -->
+        <div class="col-span-12 lg:col-span-7 bg-gym-card border border-emerald-500/30 rounded-2xl p-6 relative overflow-hidden glow-green">
+          <div class="flex items-center justify-between pb-4 border-b border-gym-border mb-4">
+            <div class="flex items-center space-x-3">
+              <div class="w-3 h-3 rounded-full bg-emerald-400 animate-ping"></div>
+              <div>
+                <h3 class="text-base font-bold text-white">Turnstile Reception Kiosk #01</h3>
+                <p class="text-xs text-slate-400 font-mono">@vladmandic/face-api • 128-d Vector Cosine Match</p>
+              </div>
+            </div>
+            <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold border border-emerald-500/30">CAMERA LIVE 60 FPS</span>
+          </div>
+
+          <!-- Video / Face Screen Container -->
+          <div class="relative bg-[#04060a] border border-emerald-500/40 rounded-xl h-80 flex items-center justify-center overflow-hidden">
+            <div class="scanner-line"></div>
+            <div class="face-mesh-scan"></div>
+
+            <!-- Face Bounding Box Graphic -->
+            <div id="faceBox" class="relative w-48 h-56 border-2 border-emerald-400 rounded-2xl flex flex-col items-center justify-between p-3 bg-emerald-950/20 transition-all duration-300">
+              <div class="w-full flex justify-between text-[10px] font-mono text-emerald-300">
+                <span>LIVENESS: 99.8%</span>
+                <span id="faceConfidence">MATCH: 0.962</span>
+              </div>
+
+              <!-- Center Holographic Face Wireframe -->
+              <div class="w-24 h-24 rounded-full border border-dashed border-emerald-400/80 flex items-center justify-center animate-pulse">
+                <i data-lucide="user-check" class="w-12 h-12 text-emerald-400"></i>
+              </div>
+
+              <div class="w-full text-center">
+                <span class="text-xs font-bold text-white tracking-wide" id="scanMemberName">CARLOS MENDEZ</span>
+                <p class="text-[9px] text-emerald-300 font-mono" id="scanMembershipType">VIP PRO - ALL ACCESS</p>
+              </div>
+            </div>
+
+            <!-- Turnstile Gate Graphic Overlay -->
+            <div id="gateOverlay" class="hidden absolute inset-0 bg-emerald-950/90 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 animate__animated animate__fadeIn">
+              <div class="w-16 h-16 rounded-full bg-emerald-500 text-black flex items-center justify-center font-black">
+                <i data-lucide="unlock" class="w-8 h-8"></i>
+              </div>
+              <h4 class="text-xl font-black text-white">ACCESS GRANTED</h4>
+              <p class="text-xs text-emerald-300 font-mono">Turnstile #1 Unlocked • Welcome to Gym Madrid</p>
+            </div>
+          </div>
+
+          <!-- Real-Time Cryptographic Embedding Vector Box -->
+          <div class="mt-4 p-4 bg-[#05070c] border border-gym-border rounded-xl font-mono text-xs space-y-2">
+            <div class="flex items-center justify-between text-slate-400 text-[11px]">
+              <span class="text-emerald-400 font-bold">Encrypted 128-Dimension Face Descriptor (No raw photo stored):</span>
+              <span>AES-256-GCM</span>
+            </div>
+            <code class="text-emerald-300 block text-[11px] break-all bg-black/40 p-2 rounded border border-emerald-900/40" id="vectorOutput">
+              [-0.0421, 0.1873, -0.0924, 0.0512, 0.2198, -0.1432, 0.0887, 0.3121, -0.0245, 0.1190, -0.0763, 0.2014, ... 116 more dimensions]
+            </code>
+          </div>
+
+          <div class="mt-4 flex items-center justify-between">
+            <button onclick="simulateFaceScan('Carlos Mendez', 'VIP PRO (All Branches)', true)" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center space-x-2 shadow-lg shadow-emerald-900/40">
+              <i data-lucide="scan" class="w-4 h-4"></i>
+              <span>Simulate Member Check-In</span>
+            </button>
+            <button onclick="simulateFaceScan('Unknown Guest', 'No Membership Found', false)" class="px-4 py-2 rounded-xl bg-rose-600/30 hover:bg-rose-600/50 text-rose-300 border border-rose-500/40 font-bold text-xs flex items-center space-x-2">
+              <i data-lucide="shield-alert" class="w-4 h-4"></i>
+              <span>Simulate Unauthorized Access</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dynamic QR Anti-Cloning PWA (5 Cols) -->
+        <div class="col-span-12 lg:col-span-5 bg-gym-card border border-gym-border rounded-2xl p-6 space-y-5">
+          <div class="flex items-center justify-between pb-3 border-b border-gym-border">
+            <div>
+              <h3 class="text-base font-bold text-white">Member PWA Dynamic QR</h3>
+              <p class="text-xs text-slate-400 font-mono">Anti-Screenshot HMAC Rotation (60s)</p>
+            </div>
+            <span class="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono">Secured</span>
+          </div>
+
+          <!-- Dynamic QR Generator Box -->
+          <div class="flex flex-col items-center justify-center p-6 bg-[#090d16] border border-cyan-500/30 rounded-xl space-y-4 relative glow-cyan">
+            <div class="relative w-44 h-44 bg-white p-3 rounded-2xl flex items-center justify-center shadow-2xl">
+              <!-- Animated QR Pattern SVG Simulation -->
+              <svg id="qrSvg" class="w-full h-full text-slate-900" viewBox="0 0 100 100" fill="currentColor">
+                <rect x="0" y="0" width="30" height="30" />
+                <rect x="5" y="5" width="20" height="20" fill="white" />
+                <rect x="10" y="10" width="10" height="10" />
+                
+                <rect x="70" y="0" width="30" height="30" />
+                <rect x="75" y="5" width="20" height="20" fill="white" />
+                <rect x="80" y="10" width="10" height="10" />
+                
+                <rect x="0" y="70" width="30" height="30" />
+                <rect x="5" y="75" width="20" height="20" fill="white" />
+                <rect x="10" y="80" width="10" height="10" />
+                
+                <!-- Center Dynamic Data Matrix -->
+                <rect x="40" y="10" width="10" height="20" />
+                <rect x="55" y="15" width="10" height="10" />
+                <rect x="35" y="40" width="30" height="15" />
+                <rect x="45" y="60" width="15" height="25" />
+                <rect x="70" y="40" width="20" height="10" />
+                <rect x="80" y="65" width="10" height="15" />
+              </svg>
+            </div>
+
+            <!-- Countdown Progress -->
+            <div class="w-full space-y-1 text-center">
+              <div class="flex items-center justify-between text-xs font-mono text-cyan-300">
+                <span>HMAC-SHA256 Token:</span>
+                <span id="qrCountdownText" class="font-bold">Rotating in 42s</span>
+              </div>
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="qrProgressBar" class="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full w-[70%] transition-all duration-1000"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-900/60 border border-slate-800 rounded-xl text-xs font-mono text-slate-400 space-y-1">
+            <p class="text-white font-semibold">🔒 Anti-Fraud Security Guarantee:</p>
+            <p>Screenshots shared via WhatsApp fail after 60s. QR is mathematically bound to the member's unique <code class="text-cyan-400">device_id</code> and membership active state.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- VIEW 3: AUTONOMOUS AI AGENTS FLEET -->
+    <div id="view-agents" class="hidden space-y-6">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- Agent 1: Security Sentinel -->
+        <div class="bg-gym-card border border-rose-500/30 rounded-2xl p-5 space-y-4 glow-red">
+          <div class="flex items-center justify-between">
+            <div class="w-9 h-9 rounded-xl bg-rose-500/10 text-rose-400 flex items-center justify-center border border-rose-500/30">
+              <i data-lucide="shield-alert" class="w-5 h-5"></i>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">ACTIVE SENTINEL</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white">SecuritySentinelAgent</h4>
+            <p class="text-xs text-slate-400 mt-1">Monitors door access spikes, tailgating attempts, and reception override fraud.</p>
+          </div>
+          <div class="p-2.5 bg-black/40 rounded-lg text-[11px] font-mono text-rose-300 border border-rose-900/30">
+            Last Action: Flagged double scan attempt within 30s at Madrid Turnstile #2.
+          </div>
+        </div>
+
+        <!-- Agent 2: SmartCoach AI -->
+        <div class="bg-gym-card border border-emerald-500/30 rounded-2xl p-5 space-y-4 glow-green">
+          <div class="flex items-center justify-between">
+            <div class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center border border-emerald-500/30">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">PERSONAL COACH</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white">SmartCoachAgent</h4>
+            <p class="text-xs text-slate-400 mt-1">Generates customized hypertrophic/fat loss plans considering member injuries & 800+ exercise GIFs.</p>
+          </div>
+          <div class="p-2.5 bg-black/40 rounded-lg text-[11px] font-mono text-emerald-300 border border-emerald-900/30">
+            Last Action: Built 4-day PPL routine for member with lumbar disc protrusion.
+          </div>
+        </div>
+
+        <!-- Agent 3: GymOps Admin -->
+        <div class="bg-gym-card border border-cyan-500/30 rounded-2xl p-5 space-y-4 glow-cyan">
+          <div class="flex items-center justify-between">
+            <div class="w-9 h-9 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center border border-cyan-500/30">
+              <i data-lucide="cpu" class="w-5 h-5"></i>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">REVENUE & CHURN</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white">GymOpsAdminAgent</h4>
+            <p class="text-xs text-slate-400 mt-1">Predicts member dropouts based on check-in frequency and triggers automated retention re-engagement.</p>
+          </div>
+          <div class="p-2.5 bg-black/40 rounded-lg text-[11px] font-mono text-cyan-300 border border-cyan-900/30">
+            Last Action: Recovered 18 inactive members this week via WhatsApp incentives.
+          </div>
+        </div>
+
+        <!-- Agent 4: FrontDesk Bot -->
+        <div class="bg-gym-card border border-purple-500/30 rounded-2xl p-5 space-y-4 glow-purple">
+          <div class="flex items-center justify-between">
+            <div class="w-9 h-9 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center border border-purple-500/30">
+              <i data-lucide="message-square" class="w-5 h-5"></i>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">24/7 RECEPTION</span>
+          </div>
+          <div>
+            <h4 class="text-sm font-bold text-white">FrontDeskBotAgent</h4>
+            <p class="text-xs text-slate-400 mt-1">Handles membership freezes, lost QR recovery, and class booking via WhatsApp API.</p>
+          </div>
+          <div class="p-2.5 bg-black/40 rounded-lg text-[11px] font-mono text-purple-300 border border-purple-900/30">
+            Last Action: Processed 14-day travel membership freeze automatically.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Live Agent Stream Log -->
+      <div class="bg-[#05070c] border border-gym-border rounded-2xl p-5 font-mono text-xs space-y-3">
+        <div class="flex items-center justify-between pb-3 border-b border-gym-border">
+          <div class="flex items-center space-x-2">
+            <span class="w-3 h-3 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-slate-300 font-bold">Prism PHP AI Runtime • Live Event Bus</span>
+          </div>
+          <span class="text-emerald-400">Laravel Worker: ACTIVE</span>
+        </div>
+
+        <div class="space-y-1.5 text-slate-300 h-48 overflow-y-auto" id="agentLiveLog">
+          <p class="text-slate-500">[10:04:12] [Prism AI] Initialized Agent Runtime (LLM Provider: Anthropic Claude 3.5 Sonnet)</p>
+          <p class="text-emerald-400">[10:04:15] [SmartCoachAgent] Generated workout routine for user_uuid: 018f92-a912-70b1 (Legs & Core Focus)</p>
+          <p class="text-cyan-400">[10:04:19] [GymOpsAdminAgent] Dunning retry scheduled for 3 failed card renewals via Stripe Webhook</p>
+          <p class="text-purple-400">[10:04:22] [FrontDeskBotAgent] Inbound WhatsApp query: "Can I bring a guest today?" -> Policy resolved: YES (VIP pass available)</p>
+          <p class="text-emerald-400">[10:04:26] [SecuritySentinelAgent] FaceID vector verification passed: Cosine distance 0.082 < Threshold 0.12</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 4: SMARTCOACH AI & WORKOUT GENERATOR -->
+    <div id="view-smartcoach" class="hidden space-y-6">
+
+      <div class="bg-gym-card border border-gym-border rounded-2xl p-6 space-y-5">
+        <div class="flex items-center justify-between pb-4 border-b border-gym-border">
+          <div>
+            <h3 class="text-lg font-bold text-white">SmartCoach AI Workout Engine</h3>
+            <p class="text-xs text-slate-400">Autonomous personalized workout generator with injury contraindication filtering</p>
+          </div>
+          <button onclick="generateCustomRoutine()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold text-xs flex items-center space-x-2 shadow-lg shadow-emerald-950/40">
+            <i data-lucide="sparkles" class="w-4 h-4"></i>
+            <span>Generate New AI Routine</span>
+          </button>
+        </div>
+
+        <!-- Exercise Routine Generated Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="routineExerciseGrid">
+          
+          <!-- Exercise 1 -->
+          <div class="bg-[#090d16] border border-gym-border rounded-xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-emerald-400">EXERCISE 01</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 font-mono">CHEST / TRICEPS</span>
+            </div>
+            <h4 class="text-base font-bold text-white">Incline Dumbbell Press</h4>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono bg-black/40 p-2.5 rounded-lg border border-slate-800">
+              <div><span class="text-slate-500 block text-[10px]">SETS</span><span class="text-white font-bold">4</span></div>
+              <div><span class="text-slate-500 block text-[10px]">REPS</span><span class="text-white font-bold">8 - 12</span></div>
+              <div><span class="text-slate-500 block text-[10px]">RPE</span><span class="text-emerald-400 font-bold">8.5</span></div>
+            </div>
+            <p class="text-xs text-slate-400 font-sans">💡 <span class="text-slate-300">AI Tip:</span> Keep shoulder blades retracted to protect rotator cuff.</p>
+          </div>
+
+          <!-- Exercise 2 -->
+          <div class="bg-[#090d16] border border-gym-border rounded-xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-emerald-400">EXERCISE 02</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 font-mono">BACK / LATS</span>
+            </div>
+            <h4 class="text-base font-bold text-white">Chest-Supported T-Bar Row</h4>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono bg-black/40 p-2.5 rounded-lg border border-slate-800">
+              <div><span class="text-slate-500 block text-[10px]">SETS</span><span class="text-white font-bold">4</span></div>
+              <div><span class="text-slate-500 block text-[10px]">REPS</span><span class="text-white font-bold">10 - 12</span></div>
+              <div><span class="text-slate-500 block text-[10px]">RPE</span><span class="text-emerald-400 font-bold">8.0</span></div>
+            </div>
+            <p class="text-xs text-slate-400 font-sans">💡 <span class="text-slate-300">AI Safety:</span> Eliminates spinal axial load for lower back safety.</p>
+          </div>
+
+          <!-- Exercise 3 -->
+          <div class="bg-[#090d16] border border-gym-border rounded-xl p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold text-emerald-400">EXERCISE 03</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 font-mono">SHOULDERS</span>
+            </div>
+            <h4 class="text-base font-bold text-white">Cable Lateral Raises (Behind Back)</h4>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono bg-black/40 p-2.5 rounded-lg border border-slate-800">
+              <div><span class="text-slate-500 block text-[10px]">SETS</span><span class="text-white font-bold">3</span></div>
+              <div><span class="text-slate-500 block text-[10px]">REPS</span><span class="text-white font-bold">12 - 15</span></div>
+              <div><span class="text-slate-500 block text-[10px]">RPE</span><span class="text-emerald-400 font-bold">9.0</span></div>
+            </div>
+            <p class="text-xs text-slate-400 font-sans">💡 <span class="text-slate-300">AI Tip:</span> Constant tension profile on lateral deltoid.</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- VIEW 5: STRIPE TOKENIZED BILLING & SUBSCRIPTIONS -->
+    <div id="view-financial" class="hidden space-y-6">
+
+      <div class="bg-gym-card border border-gym-border rounded-2xl p-6 space-y-5">
+        <div class="flex items-center justify-between pb-4 border-b border-gym-border">
+          <div>
+            <h3 class="text-lg font-bold text-white">Financial & Membership Lifecycle Hub</h3>
+            <p class="text-xs text-slate-400">Zero raw card storage • Laravel Cashier + Stripe Webhooks Verified</p>
+          </div>
+          <span class="text-xs font-mono px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">PCI-DSS COMPLIANT</span>
+        </div>
+
+        <!-- Membership Plans Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Basic -->
+          <div class="p-5 bg-[#090d16] border border-gym-border rounded-xl space-y-3">
+            <span class="text-xs font-mono text-slate-400">SINGLE BRANCH</span>
+            <h4 class="text-xl font-black text-white">Standard Plan</h4>
+            <div class="text-2xl font-black text-emerald-400 font-mono">$39.99<span class="text-xs text-slate-400 font-normal"> / month</span></div>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-sans">
+              <li>✓ Dynamic QR Access</li>
+              <li>✓ Single Branch Access</li>
+              <li>✓ SmartCoach AI Basic</li>
+            </ul>
+          </div>
+
+          <!-- VIP Pro -->
+          <div class="p-5 bg-[#090d16] border border-emerald-500/50 rounded-xl space-y-3 glow-green relative">
+            <span class="absolute top-3 right-3 text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500 text-black font-black">MOST POPULAR</span>
+            <span class="text-xs font-mono text-emerald-400">GLOBAL MULTI-BRANCH</span>
+            <h4 class="text-xl font-black text-white">VIP All-Access Pro</h4>
+            <div class="text-2xl font-black text-emerald-400 font-mono">$69.99<span class="text-xs text-slate-400 font-normal"> / month</span></div>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-sans">
+              <li>✓ Biometric FaceID Everywhere</li>
+              <li>✓ Unlimited All-Branch Access</li>
+              <li>✓ SmartCoach AI Advanced</li>
+              <li>✓ 30 Days Free Membership Freeze</li>
+            </ul>
+          </div>
+
+          <!-- Enterprise Family -->
+          <div class="p-5 bg-[#090d16] border border-gym-border rounded-xl space-y-3">
+            <span class="text-xs font-mono text-purple-400">CORPORATE / FAMILY</span>
+            <h4 class="text-xl font-black text-white">Corporate Executive</h4>
+            <div class="text-2xl font-black text-purple-400 font-mono">$149.99<span class="text-xs text-slate-400 font-normal"> / month</span></div>
+            <ul class="text-xs text-slate-300 space-y-1.5 font-sans">
+              <li>✓ 4 Full FaceID Passes</li>
+              <li>✓ Private Lockers & Spa Access</li>
+              <li>✓ Dedicated AI Fitness Concierge</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-gym-border bg-[#0a0e17] px-6 py-4 mt-auto text-xs text-slate-500 flex items-center justify-between font-sans">
+    <div class="flex items-center space-x-2">
+      <i data-lucide="shield" class="w-4 h-4 text-emerald-400"></i>
+      <span>GymInteligente AI Enterprise Platform • Developed by John Goyo</span>
+    </div>
+    <div class="flex items-center space-x-6 font-mono text-[11px]">
+      <span class="text-slate-400">Biometric Encryption: <span class="text-emerald-400 font-bold">128-D VECTOR (ACTIVE)</span></span>
+      <span class="text-slate-400">Multi-Branch Engine: <span class="text-emerald-400 font-bold">SYNCHRONIZED</span></span>
+    </div>
+  </footer>
+
+  <!-- SCRIPT & DYNAMIC INTERACTIONS -->
+  <script>
+    lucide.createIcons();
+
+    // Chart.js Traffic Heatmap
+    let trafficChart = null;
+    function initTrafficChart() {
+      const ctx = document.getElementById('trafficChart').getContext('2d');
+      trafficChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['6 AM', '8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM', '10 PM'],
+          datasets: [
+            {
+              label: 'Real Accesses',
+              data: [25, 82, 60, 48, 40, 75, 114, 88, 32],
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 3
+            },
+            {
+              label: 'AI Forecast',
+              data: [28, 85, 58, 50, 42, 80, 118, 90, 30],
+              borderColor: '#06b6d4',
+              borderDash: [5, 5],
+              fill: false,
+              tension: 0.4,
+              borderWidth: 2
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } } },
+            x: { grid: { color: '#1e293b' }, ticks: { color: '#94a3b8', font: { family: 'JetBrains Mono', size: 10 } } }
+          }
+        }
+      });
+    }
+
+    // Tab Navigation
+    function switchTab(tabId) {
+      ['dashboard', 'faceid', 'agents', 'smartcoach', 'financial'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        document.getElementById(`nav-${t}`).className = "px-4 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 flex items-center space-x-2 transition-all";
+      });
+
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+      document.getElementById(`nav-${tabId}`).className = "px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center space-x-2 transition-all";
+      lucide.createIcons();
+    }
+
+    // Branch Switcher Data
+    function switchBranch(branch) {
+      if (branch === 'madrid') {
+        document.getElementById('kpiMrr').innerText = "$18,400";
+        document.getElementById('kpiMembers').innerText = "520";
+        document.getElementById('occupancyBadge').innerText = "84 / 120 CAPACITY";
+        trafficChart.data.datasets[0].data = [25, 82, 60, 48, 40, 75, 114, 88, 32];
+      } else if (branch === 'miami') {
+        document.getElementById('kpiMrr').innerText = "$21,800";
+        document.getElementById('kpiMembers').innerText = "680";
+        document.getElementById('occupancyBadge').innerText = "112 / 150 CAPACITY";
+        trafficChart.data.datasets[0].data = [35, 95, 78, 65, 55, 90, 138, 110, 45];
+      } else if (branch === 'cdmx') {
+        document.getElementById('kpiMrr').innerText = "$8,720";
+        document.getElementById('kpiMembers').innerText = "280";
+        document.getElementById('occupancyBadge').innerText = "45 / 90 CAPACITY";
+        trafficChart.data.datasets[0].data = [15, 45, 38, 30, 25, 50, 78, 60, 20];
+      }
+      trafficChart.update();
+    }
+
+    // FaceID Simulation
+    function simulateFaceScan(name, plan, isAuthorized) {
+      const box = document.getElementById('faceBox');
+      const gate = document.getElementById('gateOverlay');
+      const nameEl = document.getElementById('scanMemberName');
+      const planEl = document.getElementById('scanMembershipType');
+
+      nameEl.innerText = name;
+      planEl.innerText = plan;
+
+      if (isAuthorized) {
+        box.className = "relative w-48 h-56 border-2 border-emerald-400 rounded-2xl flex flex-col items-center justify-between p-3 bg-emerald-950/40 glow-green transition-all duration-300";
+        gate.classList.remove('hidden');
+        setTimeout(() => {
+          gate.classList.add('hidden');
+        }, 2500);
+      } else {
+        box.className = "relative w-48 h-56 border-2 border-rose-500 rounded-2xl flex flex-col items-center justify-between p-3 bg-rose-950/40 glow-red transition-all duration-300";
+        alert("🚨 ACCESS DENIED: Face descriptor not registered in active members database.");
+      }
+    }
+
+    function triggerGateOpen() {
+      switchTab('faceid');
+      simulateFaceScan('Sofia Rodriguez', 'VIP ALL-ACCESS', true);
+    }
+
+    // SmartCoach AI Routine Generator
+    function generateCustomRoutine() {
+      const grid = document.getElementById('routineExerciseGrid');
+      grid.innerHTML = `
+        <div class="bg-[#090d16] border border-gym-border rounded-xl p-4 space-y-3 animate__animated animate__fadeIn">
+          <div class="flex items-center justify-between"><span class="text-xs font-mono font-bold text-cyan-400">EXERCISE 01</span><span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 font-mono">LEGS / GLUTES</span></div>
+          <h4 class="text-base font-bold text-white">Barbell Bulgarian Split Squat</h4>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono bg-black/40 p-2.5 rounded-lg border border-slate-800">
+            <div><span class="text-slate-500 block text-[10px]">SETS</span><span class="text-white font-bold">4</span></div>
+            <div><span class="text-slate-500 block text-[10px]">REPS</span><span class="text-white font-bold">10 / leg</span></div>
+            <div><span class="text-slate-500 block text-[10px]">RPE</span><span class="text-cyan-400 font-bold">9.0</span></div>
+          </div>
+          <p class="text-xs text-slate-400">💡 <span class="text-slate-300">AI Note:</span> Superior gluteus medius activation with zero knee shear.</p>
+        </div>
+
+        <div class="bg-[#090d16] border border-gym-border rounded-xl p-4 space-y-3 animate__animated animate__fadeIn">
+          <div class="flex items-center justify-between"><span class="text-xs font-mono font-bold text-cyan-400">EXERCISE 02</span><span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 font-mono">HAMSTRINGS</span></div>
+          <h4 class="text-base font-bold text-white">Seated Leg Curl (Loaded Stretch)</h4>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono bg-black/40 p-2.5 rounded-lg border border-slate-800">
+            <div><span class="text-slate-500 block text-[10px]">SETS</span><span class="text-white font-bold">3</span></div>
+            <div><span class="text-slate-500 block text-[10px]">REPS</span><span class="text-white font-bold">12 - 15</span></div>
+            <div><span class="text-slate-500 block text-[10px]">RPE</span><span class="text-cyan-400 font-bold">8.5</span></div>
+          </div>
+          <p class="text-xs text-slate-400">💡 <span class="text-slate-300">AI Note:</span> Emphasize 3-second eccentric phase.</p>
+        </div>
+
+        <div class="bg-[#090d16] border border-gym-border rounded-xl p-4 space-y-3 animate__animated animate__fadeIn">
+          <div class="flex items-center justify-between"><span class="text-xs font-mono font-bold text-cyan-400">EXERCISE 03</span><span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 font-mono">CALVES</span></div>
+          <h4 class="text-base font-bold text-white">Standing Single-Leg Calf Raise</h4>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs font-mono bg-black/40 p-2.5 rounded-lg border border-slate-800">
+            <div><span class="text-slate-500 block text-[10px]">SETS</span><span class="text-white font-bold">4</span></div>
+            <div><span class="text-slate-500 block text-[10px]">REPS</span><span class="text-white font-bold">15 - 20</span></div>
+            <div><span class="text-slate-500 block text-[10px]">RPE</span><span class="text-cyan-400 font-bold">9.5</span></div>
+          </div>
+          <p class="text-xs text-slate-400">💡 <span class="text-slate-300">AI Note:</span> Full dorsiflexion stretch at bottom.</p>
+        </div>
+      `;
+    }
+
+    // Auto Demo Mode with automatic video recording
+    async function startAutoDemo() {
+      const btn = document.getElementById('btnAutoDemo');
+      let mediaRecorder = null;
+      let recordedChunks = [];
+      let stream = null;
+
+      if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) {
+        try {
+          const wantRecord = confirm("¿Deseas que el navegador grabe y descargue automáticamente el video (.webm)?\n\nPresiona 'Aceptar' para seleccionar la pestaña y descargar el archivo al finalizar.");
+          if (wantRecord) {
+            stream = await navigator.mediaDevices.getDisplayMedia({ video: { frameRate: 30 } });
+            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+            mediaRecorder.ondataavailable = (e) => {
+              if (e.data.size > 0) recordedChunks.push(e.data);
+            };
+            mediaRecorder.onstop = () => {
+              const blob = new Blob(recordedChunks, { type: 'video/webm' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = 'gym-inteligente-ai-demo.webm';
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              alert("¡Video descargado exitosamente como 'gym-inteligente-ai-demo.webm'!");
+            };
+            mediaRecorder.start();
+          }
+        } catch (err) {
+          console.log("Grabación cancelada:", err);
+        }
+      }
+
+      btn.innerHTML = `<i data-lucide="loader" class="w-3.5 h-3.5 animate-spin"></i><span>Recording Active (30s)...</span>`;
+      lucide.createIcons();
+
+      // Step 1: Command Center
+      switchTab('dashboard');
+      switchBranch('madrid');
+
+      // Step 2 (after 6s): Switch to Miami & Change Tab to FaceID
+      setTimeout(() => {
+        switchBranch('miami');
+        switchTab('faceid');
+        simulateFaceScan('Carlos Mendez', 'VIP ALL-ACCESS PRO', true);
+      }, 6000);
+
+      // Step 3 (after 13s): Switch to AI Agents Swarm
+      setTimeout(() => {
+        switchTab('agents');
+      }, 13000);
+
+      // Step 4 (after 20s): Switch to SmartCoach Routine Generator
+      setTimeout(() => {
+        switchTab('smartcoach');
+        generateCustomRoutine();
+      }, 20000);
+
+      // Step 5 (after 26s): Switch to Stripe Billing
+      setTimeout(() => {
+        switchTab('financial');
+      }, 26000);
+
+      // Step 6 (after 30s): Complete & Download
+      setTimeout(() => {
+        switchTab('dashboard');
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+          if (stream) stream.getTracks().forEach(track => track.stop());
+        }
+        btn.innerHTML = `<i data-lucide="video" class="w-3.5 h-3.5 fill-current"></i><span>🎬 30s Video Demo Mode</span>`;
+        lucide.createIcons();
+      }, 30000);
+    }
+
+    window.onload = () => {
+      initTrafficChart();
+    };
+  </script>
+</body>
+</html>
